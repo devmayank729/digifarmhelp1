@@ -15,8 +15,15 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get user from the token
-      req.user = await User.findById(decoded.id).select('-password');
+      // Get user from the token and check if token is in user's tokens array
+      req.user = await User.findOne({
+        _id: decoded.id,
+        'tokens.token': token,
+      }).select('-password');
+
+      if (!req.user) {
+        return res.status(401).json({ message: 'Not authorized' });
+      }
 
       next();
     } catch (error) {

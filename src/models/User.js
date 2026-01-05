@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema({
   profilePicture: {
     type: String, // URL to profile picture
   },
+  tokens: [{
+    token: {
+      type: String,
+      required: true,
+    },
+  }],
 }, {
   timestamps: true,
 });

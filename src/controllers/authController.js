@@ -32,6 +32,10 @@ const register = async (req, res) => {
     });
 
     if (user) {
+      const token = generateToken(user._id);
+      user.tokens = user.tokens.concat({ token });
+      await user.save();
+
       res.status(201).json({
         _id: user._id,
         name: user.name,
@@ -39,7 +43,7 @@ const register = async (req, res) => {
         phone: user.phone,
         location: user.location,
         role: user.role,
-        token: generateToken(user._id),
+        token: token,
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
@@ -60,12 +64,16 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.comparePassword(password))) {
+      const token = generateToken(user._id);
+      user.tokens = user.tokens.concat({ token });
+      await user.save();
+
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
-        token: generateToken(user._id),
+        token: token,
       });
     } else {
       res.status(401).json({ message: 'Invalid credentials' });
@@ -80,7 +88,7 @@ const login = async (req, res) => {
 // @access  Private
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user._id).select('-password');
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
