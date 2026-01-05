@@ -1,0 +1,54 @@
+/* IoT Animations for DigiFarmHelp */
+
+/* Pump Animation */
+@keyframes pump-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes water-fill {
+  from { height: 0%; }
+  to { height: 100%; }
+}
+
+.pump-active .pump-blade {
+  animation: pump-rotate 2s linear infinite;
+}
+
+.pump-active .water-level {
+  animation: water-fill 5s ease-in-out infinite;
+}
+
+/* Sensor Pulse Animation */
+@keyframes sensor-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+.sensor-active {
+  animation: sensor-pulse 2s infinite;
+}
+
+/* Monitor Blink Animation */
+@keyframes monitor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.5; }
+}
+
+.monitor-active {
+  animation: monitor-blink 1s infinite;
+}
+
+/* Status Indicator */
+.status-online {
+  color: var(--accent);
+}
+
+.status-offline {
+  color: var(--danger);
+}
+
+.status-maintenance {
+  color: var(--warning);
+}

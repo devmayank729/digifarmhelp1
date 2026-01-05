@@ -1,0 +1,78 @@
+/* Dashboard specific styles for DigiFarmHelp */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.device-item {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.device-item h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary);
+}
+
+.device-item p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.status-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.status-inactive {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.status-maintenance {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.metric-card {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.metric-card h3 {
+  font-size: 2rem;
+  color: var(--primary);
+  margin: 0.5rem 0;
+}
+
+.metric-card p {
+  color: var(--dark);
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    flex-direction: column;
+  }
+
+  .quick-actions .btn {
+    width: 100%;
+  }
+}

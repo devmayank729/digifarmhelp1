@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livestock Trading - DigiFarmHelp</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fas fa-seedling"></i>
+        <span>DigiFarmHelp</span>
+      </div>
+      <div class="nav-menu">
+        <a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="/marketplace" class="nav-link"><i class="fas fa-store"></i> Marketplace</a>
+        <a href="/crop-advisory" class="nav-link"><i class="fas fa-leaf"></i> Crop Advisory</a>
+        <a href="/labour" class="nav-link"><i class="fas fa-users"></i> Labour</a>
+        <a href="/tools" class="nav-link"><i class="fas fa-tools"></i> Tools</a>
+        <a href="/services" class="nav-link"><i class="fas fa-concierge-bell"></i> Services</a>
+        <a href="/schemes" class="nav-link"><i class="fas fa-gavel"></i> Govt Schemes</a>
+        <a href="/livestock" class="nav-link active"><i class="fas fa-horse"></i> Livestock</a>
+        <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-horse"></i> Livestock Trading</h1>
+        <p>Buy and sell cattle, goats, poultry, and other livestock</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Livestock Search -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3><i class="fas fa-search"></i> Find Livestock</h3>
+          </div>
+          <div class="card-body">
+            <div class="filters">
+              <select id="livestockTypeFilter" class="form-control">
+                <option value="">All Types</option>
+                <option value="Cow">Cow</option>
+                <option value="Buffalo">Buffalo</option>
+                <option value="Goat">Goat</option>
+                <option value="Sheep">Sheep</option>
+                <option value="Chicken">Chicken</option>
+                <option value="Pig">Pig</option>
+              </select>
+              <input type="text" id="livestockLocationFilter" class="form-control" placeholder="Location">
+              <input type="text" id="livestockBreedFilter" class="form-control" placeholder="Breed">
+              <button id="searchLivestockBtn" class="btn btn-primary">Search</button>
+            </div>
+            <div id="livestockResults" class="results-grid">
+              <div class="loading">Search for livestock in your area...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Livestock -->
+        <div class="dashboard-card" id="addLivestockCard">
+          <div class="card-header">
+            <h3><i class="fas fa-plus"></i> Sell Your Livestock</h3>
+          </div>
+          <div class="card-body">
+            <form id="addLivestockForm">
+              <div class="form-group">
+                <label for="livestockType">Type</label>
+                <select id="livestockType" class="form-control" required>
+                  <option value="">Select Type</option>
+                  <option value="Cow">Cow</option>
+                  <option value="Buffalo">Buffalo</option>
+                  <option value="Goat">Goat</option>
+                  <option value="Sheep">Sheep</option>
+                  <option value="Chicken">Chicken</option>
+                  <option value="Pig">Pig</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="livestockBreed">Breed</label>
+                <input type="text" id="livestockBreed" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="livestockAge">Age (months)</label>
+                <input type="number" id="livestockAge" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="livestockWeight">Weight (kg)</label>
+                <input type="number" id="livestockWeight" class="form-control" required>
+              </div>
+              <div class="form-group" id="milkProductionGroup">
+                <label for="livestockMilkProduction">Milk Production (liters/day)</label>
+                <input type="number" id="livestockMilkProduction" class="form-control" step="0.1">
+              </div>
+              <div class="form-group" id="lactationGroup">
+                <label for="livestockLactationCount">Lactation Count</label>
+                <input type="number" id="livestockLactationCount" class="form-control">
+              </div>
+              <div class="form-group" id="lactationMonthGroup">
+                <label for="livestockLactationMonth">Lactation Month</label>
+                <input type="number" id="livestockLactationMonth" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="livestockLocation">Location</label>
+                <input type="text" id="livestockLocation" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="livestockPrice">Price (₹)</label>
+                <input type="number" id="livestockPrice" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="livestockDescription">Description</label>
+                <textarea id="livestockDescription" class="form-control" rows="3" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">List for Sale</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- My Livestock -->
+        <div class="dashboard-card" id="myLivestockCard">
+          <div class="card-header">
+            <h3><i class="fas fa-list"></i> My Listings</h3>
+          </div>
+          <div class="card-body">
+            <div id="myLivestockResults" class="results-grid">
+              <div class="loading">Loading your listings...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Livestock Details Modal -->
+  <div id="livestockModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="livestockModalTitle">Livestock Details</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body" id="livestockModalBody">
+        <!-- Livestock details will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api-client.js"></script>
+  <script src="/js/livestock.js"></script>
+</body>
+</html>

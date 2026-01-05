@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - DigiFarmHelp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/iot-animations.css">
+</head>
+<body>
+  <header style="background-color: var(--primary); color: var(--white); padding: 1rem 0;">
+    <div class="container">
+      <nav style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 1.5rem;">DigiFarmHelp</h1>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <a href="/marketplace" class="btn btn-outline" style="margin-right: 0.5rem;">Marketplace</a>
+          <a href="/crop-advisory" class="btn btn-outline" style="margin-right: 0.5rem;">Crop Advisory</a>
+          <a href="/labour" class="btn btn-outline" style="margin-right: 0.5rem;">Labour</a>
+          <a href="/tools" class="btn btn-outline" style="margin-right: 0.5rem;">Tools</a>
+          <a href="/services" class="btn btn-outline" style="margin-right: 0.5rem;">Services</a>
+          <a href="/schemes" class="btn btn-outline" style="margin-right: 0.5rem;">Govt Schemes</a>
+          <a href="/livestock" class="btn btn-outline" style="margin-right: 0.5rem;">Livestock</a>
+          <a href="/iot" class="btn btn-accent" style="margin-right: 0.5rem;">IoT Devices</a>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <h2>Welcome to your Dashboard</h2>
+    <div id="userInfo" style="margin-bottom: 2rem;"></div>
+
+    <div class="grid grid-3">
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <a href="/marketplace" class="btn btn-primary">Marketplace</a>
+          <a href="/crop-advisory" class="btn btn-accent">Crop Advisory</a>
+          <a href="/labour" class="btn btn-primary">Labour</a>
+          <a href="/tools" class="btn btn-accent">Tools</a>
+          <a href="/services" class="btn btn-primary">Services</a>
+          <a href="/schemes" class="btn btn-accent">Govt Schemes</a>
+          <a href="/livestock" class="btn btn-primary">Livestock</a>
+          <a href="/iot" class="btn btn-accent">IoT Devices</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Weather Today</h3>
+        <div id="weatherInfo">
+          <p>Loading weather...</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Notifications</h3>
+        <div id="notifications">
+          <p>No new notifications</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+      <h3>Recent Marketplace Items</h3>
+      <div id="recentItems" class="grid grid-3">
+        <p>Loading items...</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/app.js"></script>
+  <script>
+    // Check authentication
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!token || !user) {
+      window.location.href = '/login';
+    }
+
+    // Display user info
+    document.getElementById('userInfo').innerHTML = `
+      <p><strong>Name:</strong> ${user.name}</p>
+      <p><strong>Email:</strong> ${user.email}</p>
+      <p><strong>Role:</strong> ${user.role}</p>
+    `;
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/';
+    });
+
+    // Load device status
+    async function loadDeviceStatus() {
+      try {
+        const response = await fetch('/api/iot/devices', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const devices = await response.json();
+
+        if (response.ok) {
+          const statusDiv = document.getElementById('deviceStatus');
+          if (devices.length === 0) {
+            statusDiv.innerHTML = '<p>No IoT devices registered.</p>';
+          } else {
+            statusDiv.innerHTML = devices.map(device => `
+              <div class="device-item" style="margin-bottom: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius);">
+                <h4>${device.name} (${device.type})</h4>
+                <p>Location: ${device.location}</p>
+                <p>Status: <span class="status-${device.status.toLowerCase()}">${device.status}</span></p>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load devices');
+      }
+    }
+
+    // Load recent items
+    async function loadRecentItems() {
+      try {
+        const response = await fetch('/api/marketplace');
+        const items = await response.json();
+
+        if (response.ok) {
+          const itemsDiv = document.getElementById('recentItems');
+          if (items.length === 0) {
+            itemsDiv.innerHTML = '<p>No items available.</p>';
+          } else {
+            itemsDiv.innerHTML = items.slice(0, 3).map(item => `
+              <div class="card">
+                <h4>${item.title}</h4>
+                <p>₹${item.price}</p>
+                <p>Category: ${item.category}</p>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load items');
+      }
+    }
+
+    // Load weather
+    async function loadWeather() {
+      try {
+        // Mock weather data for demo (in real app, use weather API)
+        const mockWeather = {
+          location: 'Karnataka, India',
+          temperature: 28,
+          humidity: 65,
+          condition: 'Sunny',
+          forecast: 'Clear skies, good for farming'
+        };
+
+        const weatherDiv = document.getElementById('weatherInfo');
+        weatherDiv.innerHTML = `
+          <p><strong>${mockWeather.location}</strong></p>
+          <p>Temperature: ${mockWeather.temperature}°C</p>
+          <p>Humidity: ${mockWeather.humidity}%</p>
+          <p>Condition: ${mockWeather.condition}</p>
+          <p><em>${mockWeather.forecast}</em></p>
+        `;
+      } catch (error) {
+        console.error('Failed to load weather');
+      }
+    }
+
+    // Load notifications
+    async function loadNotifications() {
+      try {
+        const response = await fetch('/api/iot/devices', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const devices = await response.json();
+
+        if (response.ok) {
+          const notifications = [];
+          devices.forEach(device => {
+            if (device.status === 'Inactive') {
+              notifications.push(`⚠️ ${device.name} is offline`);
+            }
+            if (device.type === 'Sensor' && device.status === 'Active') {
+              notifications.push(`📊 ${device.name} data updated`);
+            }
+          });
+
+          const notifDiv = document.getElementById('notifications');
+          if (notifications.length === 0) {
+            notifDiv.innerHTML = '<p>No new notifications</p>';
+          } else {
+            notifDiv.innerHTML = notifications.map(n => `<p>${n}</p>`).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load notifications');
+      }
+    }
+
+    loadDeviceStatus();
+    loadRecentItems();
+    loadWeather();
+    loadNotifications();
+  </script>
+</body>
+</html>

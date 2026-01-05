@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DigiFarmHelp - Smart Farming for Indian Farmers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <!-- Header -->
+  <header style="background-color: var(--primary); color: var(--white); padding: 1rem 0;">
+    <div class="container">
+      <nav style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 1.5rem;">DigiFarmHelp</h1>
+        <div>
+          <a href="/login" class="btn btn-outline" style="margin-right: 1rem;">Login</a>
+          <a href="/signup" class="btn btn-accent">Sign Up</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: var(--white); padding: 4rem 0; text-align: center;">
+    <div class="container">
+      <h1 style="font-size: 3rem; margin-bottom: 1rem;">Empowering Indian Farmers with Technology</h1>
+      <p style="font-size: 1.25rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+        Access real-time market rates, manage your farm IoT devices, and connect with buyers and sellers in the unified marketplace.
+      </p>
+      <a href="/dashboard" class="btn btn-accent" style="font-size: 1.125rem; padding: 1rem 2rem;">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Mandi Rates Ticker -->
+  <section style="background-color: var(--warning); color: var(--dark); padding: 1rem 0; overflow: hidden;">
+    <div class="container">
+      <div id="ticker" style="white-space: nowrap; animation: scroll 30s linear infinite;">
+        <span style="font-weight: 600; margin-right: 2rem;">Mandi Rates:</span>
+        <span>Wheat ₹2,200/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Rice ₹3,100/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Cotton ₹6,500/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Soybean ₹4,200/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Maize ₹1,800/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Sugarcane ₹300/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Potato ₹1,500/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Onion ₹2,800/quintal</span>
+        <span style="margin: 0 2rem;">•</span>
+        <span>Tomato ₹1,200/quintal</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section style="padding: 4rem 0;">
+    <div class="container">
+      <h2 style="text-align: center; margin-bottom: 3rem;">Why Choose DigiFarmHelp?</h2>
+      <div class="grid grid-3">
+        <div class="card" style="text-align: center;">
+          <h3>IoT Device Management</h3>
+          <p>Monitor and control your farm equipment remotely with our smart IoT integration.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <h3>Unified Marketplace</h3>
+          <p>Buy and sell seeds, tools, and livestock directly from verified sellers.</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <h3>Real-time Insights</h3>
+          <p>Get live mandi rates and weather forecasts to make informed decisions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background-color: var(--dark); color: var(--white); padding: 2rem 0; text-align: center;">
+    <div class="container">
+      <p>&copy; 2026 DigiFarmHelp. All rights reserved. Made for Indian Farmers.</p>
+    </div>
+  </footer>
+
+  <style>
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</body>
+</html>

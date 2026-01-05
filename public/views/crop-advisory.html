@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Advisory - DigiFarmHelp</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fas fa-seedling"></i>
+        <span>DigiFarmHelp</span>
+      </div>
+      <div class="nav-menu">
+        <a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="/marketplace" class="nav-link"><i class="fas fa-store"></i> Marketplace</a>
+        <a href="/crop-advisory" class="nav-link active"><i class="fas fa-leaf"></i> Crop Advisory</a>
+        <a href="/labour" class="nav-link"><i class="fas fa-users"></i> Labour</a>
+        <a href="/tools" class="nav-link"><i class="fas fa-tools"></i> Tools</a>
+        <a href="/services" class="nav-link"><i class="fas fa-concierge-bell"></i> Services</a>
+        <a href="/schemes" class="nav-link"><i class="fas fa-gavel"></i> Govt Schemes</a>
+        <a href="/livestock" class="nav-link"><i class="fas fa-horse"></i> Livestock</a>
+        <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-leaf"></i> Crop Advisory</h1>
+        <p>Get personalized crop recommendations based on your farm profile</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Crop Recommendations -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3><i class="fas fa-star"></i> Recommended Crops</h3>
+          </div>
+          <div class="card-body">
+            <div id="recommendationsContainer" class="crop-grid">
+              <div class="loading">Loading recommendations...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- All Crops -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3><i class="fas fa-list"></i> All Crops</h3>
+            <div class="filters">
+              <select id="seasonFilter" class="form-control">
+                <option value="">All Seasons</option>
+                <option value="Rabi">Rabi</option>
+                <option value="Kharif">Kharif</option>
+                <option value="Zaid">Zaid</option>
+              </select>
+              <input type="text" id="regionFilter" class="form-control" placeholder="Filter by region">
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="cropsContainer" class="crop-grid">
+              <div class="loading">Loading crops...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Crop Details Modal -->
+  <div id="cropModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="cropModalTitle">Crop Details</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body" id="cropModalBody">
+        <!-- Crop details will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api-client.js"></script>
+  <script src="/js/crop-advisory.js"></script>
+</body>
+</html>

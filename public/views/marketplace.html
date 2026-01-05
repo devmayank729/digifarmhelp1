@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketplace - DigiFarmHelp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+  <header style="background-color: var(--primary); color: var(--white); padding: 1rem 0;">
+    <div class="container">
+      <nav style="display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="margin: 0; font-size: 1.5rem;">DigiFarmHelp - Marketplace</h1>
+        <div>
+          <a href="/dashboard" class="btn btn-outline" style="margin-right: 1rem;">Dashboard</a>
+          <button id="addItemBtn" class="btn btn-accent" style="margin-right: 1rem;">Add Item</button>
+          <button id="logoutBtn" class="btn btn-outline">Logout</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 2rem 0;">
+    <h2>Unified Marketplace</h2>
+    <div id="itemsGrid" class="grid grid-4" style="margin-top: 2rem;">
+      <p>Loading items...</p>
+    </div>
+  </main>
+
+  <!-- Add Item Modal -->
+  <div id="addItemModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div class="card" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 500px; width: 90%;">
+      <h3>Add New Item</h3>
+      <form id="addItemForm">
+        <div style="margin-bottom: 1rem;">
+          <label for="title" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Title</label>
+          <input type="text" id="title" required>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="description" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Description</label>
+          <textarea id="description" required></textarea>
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="price" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Price (₹)</label>
+          <input type="number" id="price" required min="0">
+        </div>
+        <div style="margin-bottom: 1rem;">
+          <label for="category" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Category</label>
+          <select id="category" required>
+            <option value="Seeds">Seeds</option>
+            <option value="Tools">Tools</option>
+            <option value="Livestock">Livestock</option>
+          </select>
+        </div>
+        <div id="livestockFields" style="display: none;">
+          <div style="margin-bottom: 1rem;">
+            <label for="milkCapacity" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Milk Capacity (L)</label>
+            <input type="number" id="milkCapacity" min="0">
+          </div>
+          <div style="margin-bottom: 1rem;">
+            <label for="lactationStage" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Lactation Stage</label>
+            <input type="number" id="lactationStage" min="1" max="10">
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="btn btn-primary">Add Item</button>
+          <button type="button" id="cancelBtn" class="btn btn-outline">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!token || !user) {
+      window.location.href = '/login';
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/';
+    });
+
+    // Load items
+    async function loadItems() {
+      try {
+        const response = await fetch('/api/marketplace');
+        const items = await response.json();
+
+        if (response.ok) {
+          const grid = document.getElementById('itemsGrid');
+          if (items.length === 0) {
+            grid.innerHTML = '<p>No items available.</p>';
+          } else {
+            grid.innerHTML = items.map(item => `
+              <div class="card">
+                <h4>${item.title}</h4>
+                <p>${item.description}</p>
+                <p><strong>₹${item.price}</strong></p>
+                <p>Category: ${item.category}</p>
+                ${item.category === 'Livestock' ? `
+                  <p>Milk Capacity: ${item.milkCapacity} L</p>
+                  <p>Lactation Cycle: ${item.lactationStage}</p>
+                ` : ''}
+                <div style="margin-top: 1rem;">
+                  <button class="btn btn-accent" onclick="callSeller('${item.sellerId.email}')">Call Seller</button>
+                  <button class="btn btn-outline" onclick="viewDetails('${item._id}')">Details</button>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load items');
+      }
+    }
+
+    // Add item modal
+    document.getElementById('addItemBtn').addEventListener('click', () => {
+      document.getElementById('addItemModal').style.display = 'block';
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      document.getElementById('addItemModal').style.display = 'none';
+    });
+
+    // Category change
+    document.getElementById('category').addEventListener('change', (e) => {
+      const livestockFields = document.getElementById('livestockFields');
+      livestockFields.style.display = e.target.value === 'Livestock' ? 'block' : 'none';
+    });
+
+    // Add item form
+    document.getElementById('addItemForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const price = document.getElementById('price').value;
+      const category = document.getElementById('category').value;
+      const milkCapacity = document.getElementById('milkCapacity').value;
+      const lactationStage = document.getElementById('lactationStage').value;
+
+      const itemData = { title, description, price, category };
+      if (category === 'Livestock') {
+        itemData.milkCapacity = milkCapacity;
+        itemData.lactationStage = lactationStage;
+      }
+
+      try {
+        const response = await fetch('/api/marketplace', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(itemData)
+        });
+
+        if (response.ok) {
+          document.getElementById('addItemModal').style.display = 'none';
+          loadItems();
+        } else {
+          alert('Failed to add item');
+        }
+      } catch (error) {
+        alert('Failed to add item');
+      }
+    });
+
+    // Call seller
+    function callSeller(email) {
+      alert(`Contact seller at: ${email}`);
+    }
+
+    // View details
+    function viewDetails(id) {
+      alert(`View details for item ${id}`);
+    }
+
+    loadItems();
+  </script>
+</body>
+</html>

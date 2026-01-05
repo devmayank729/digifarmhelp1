@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agricultural Services - DigiFarmHelp</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <i class="fas fa-seedling"></i>
+        <span>DigiFarmHelp</span>
+      </div>
+      <div class="nav-menu">
+        <a href="/dashboard" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="/marketplace" class="nav-link"><i class="fas fa-store"></i> Marketplace</a>
+        <a href="/crop-advisory" class="nav-link"><i class="fas fa-leaf"></i> Crop Advisory</a>
+        <a href="/labour" class="nav-link"><i class="fas fa-users"></i> Labour</a>
+        <a href="/tools" class="nav-link"><i class="fas fa-tools"></i> Tools</a>
+        <a href="/services" class="nav-link active"><i class="fas fa-concierge-bell"></i> Services</a>
+        <a href="/schemes" class="nav-link"><i class="fas fa-gavel"></i> Govt Schemes</a>
+        <a href="/livestock" class="nav-link"><i class="fas fa-horse"></i> Livestock</a>
+        <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="container">
+      <div class="page-header">
+        <h1><i class="fas fa-concierge-bell"></i> Agricultural Services</h1>
+        <p>Find veterinary, repair, testing, and other farming services</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Service Search -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3><i class="fas fa-search"></i> Find Services</h3>
+          </div>
+          <div class="card-body">
+            <div class="filters">
+              <input type="text" id="serviceLocationFilter" class="form-control" placeholder="Location">
+              <select id="serviceCategoryFilter" class="form-control">
+                <option value="">All Categories</option>
+                <option value="Veterinary">Veterinary</option>
+                <option value="Equipment Repair">Equipment Repair</option>
+                <option value="Pest Control">Pest Control</option>
+                <option value="Soil Testing">Soil Testing</option>
+                <option value="Irrigation">Irrigation</option>
+                <option value="Consultation">Consultation</option>
+                <option value="Other">Other</option>
+              </select>
+              <button id="searchServicesBtn" class="btn btn-primary">Search</button>
+            </div>
+            <div id="servicesResults" class="results-grid">
+              <div class="loading">Search for services in your area...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Service -->
+        <div class="dashboard-card" id="addServiceCard">
+          <div class="card-header">
+            <h3><i class="fas fa-plus"></i> Add Your Service</h3>
+          </div>
+          <div class="card-body">
+            <form id="addServiceForm">
+              <div class="form-group">
+                <label for="serviceName">Service Name</label>
+                <input type="text" id="serviceName" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="serviceCategory">Category</label>
+                <select id="serviceCategory" class="form-control" required>
+                  <option value="">Select Category</option>
+                  <option value="Veterinary">Veterinary</option>
+                  <option value="Equipment Repair">Equipment Repair</option>
+                  <option value="Pest Control">Pest Control</option>
+                  <option value="Soil Testing">Soil Testing</option>
+                  <option value="Irrigation">Irrigation</option>
+                  <option value="Consultation">Consultation</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="serviceDescription">Description</label>
+                <textarea id="serviceDescription" class="form-control" rows="3" required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="servicePricing">Pricing</label>
+                <input type="text" id="servicePricing" class="form-control" placeholder="e.g., ₹500 per visit" required>
+              </div>
+              <div class="form-group">
+                <label for="serviceLocation">Location</label>
+                <input type="text" id="serviceLocation" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="servicePhone">Phone Number</label>
+                <input type="tel" id="servicePhone" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="serviceEmail">Email</label>
+                <input type="email" id="serviceEmail" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="serviceCertifications">Certifications</label>
+                <input type="text" id="serviceCertifications" class="form-control" placeholder="Comma-separated">
+              </div>
+              <button type="submit" class="btn btn-primary">Add Service</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- My Services -->
+        <div class="dashboard-card" id="myServicesCard">
+          <div class="card-header">
+            <h3><i class="fas fa-list"></i> My Services</h3>
+          </div>
+          <div class="card-body">
+            <div id="myServicesResults" class="results-grid">
+              <div class="loading">Loading your services...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Service Details Modal -->
+  <div id="serviceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="serviceModalTitle">Service Details</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body" id="serviceModalBody">
+        <!-- Service details will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api-client.js"></script>
+  <script src="/js/services.js"></script>
+</body>
+</html>
